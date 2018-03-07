@@ -12,8 +12,8 @@ import Parse
 class LoginViewController: UIViewController {
     
     @IBOutlet weak var usernameField: UITextField!
-    
     @IBOutlet weak var passwordField: UITextField!
+    
     
     @IBAction func onSignUp(_ sender: Any) {
         // initialize a user object
@@ -26,10 +26,25 @@ class LoginViewController: UIViewController {
         // call sign up function on the object
         newUser.signUpInBackground { (success: Bool, error: Error?) in
             if let error = error {
-                print(error.localizedDescription)
+                print("User log in failed: \(error.localizedDescription)")
+                
+                
+                let alertController = UIAlertController(title: "Username Required", message: "Please enter a username in the text field", preferredStyle: .alert)
+                
+                // create an OK action
+                let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                    // handle response here.
+                    print("ok pressed")
+                }
+                alertController.addAction(OKAction)
+                
+                self.present(alertController, animated: true) {
+                    // optional code for what happens after the alert controller has finished presenting
+                }
             } else {
                 print("User Registered successfully")
                 // manually segue to logged in view
+                self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
         }
     }
@@ -42,9 +57,26 @@ class LoginViewController: UIViewController {
         PFUser.logInWithUsername(inBackground: username, password: password) { (user: PFUser?, error: Error?) in
             if let error = error {
                 print("User log in failed: \(error.localizedDescription)")
+                
+                if self.usernameField.text!.isEmpty || (self.passwordField.text!.isEmpty) {
+                    let alertController = UIAlertController(title: "Information Missing", message: "Please enter a username and password in the text fields", preferredStyle: .alert)
+                    
+                    // create an OK action
+                    let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                        // handle response here.
+                        print("ok pressed")
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.present(alertController, animated: true) {
+                        // optional code for what happens after the alert controller has finished presenting
+                    }
+                }
+                
             } else {
                 print("User logged in successfully")
                 // display view controller that needs to shown after successful login
+                self.performSegue(withIdentifier: "loginSegue", sender: nil)
             }
         }
     }
