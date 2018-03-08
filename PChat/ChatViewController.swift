@@ -36,11 +36,11 @@ class ChatViewController: UIViewController, UITableViewDataSource {
     
     func onTimer() {
         // Add code to be run periodically
-        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
         
         let query = PFQuery(className: "Message")
         query.addDescendingOrder("createdAt")
-        query.limit = 4
+        query.limit = 8
         query.includeKey("user")
         
         query.findObjectsInBackground {
